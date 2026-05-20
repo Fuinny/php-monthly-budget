@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -29,4 +30,39 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Create default categories for newly created users.
+     */
+    public function createDefaultCategories() : void
+    {
+        $defaults = [
+            ['name' => 'Maistas', 'type' => 'expense'],
+            ['name' => 'Nuoma', 'type' => 'expense'],
+            ['name' => 'Pramogos', 'type' => 'expense'],
+            ['name' => 'Transportas', 'type' => 'expense'],
+            ['name' => 'Atlyginimas', 'type' => 'income']
+        ];
+
+        foreach ($defaults as $category) {
+            $this->categories()->create($category);
+        }
+    }
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function budgets(): HasMany
+    {
+        return $this->hasMany(Budget::class);
+    }
+
+
 }
