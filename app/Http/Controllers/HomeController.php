@@ -2,27 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
-        return view('home');
+        $user = Auth::user();
+
+        $totalIncome = $user->transactions()
+            ->whereHas('category', fn ($q) => $q->where('type', 'income'))
+            ->whereMonth('date', now()->month)
+            ->sum('amount');
+
+        $totalExpense = $user->transactions()
+            ->whereHas('category', fn ($q) => $q->where('type', 'expense'))
+            ->whereMonth('date', now()->month)
+            ->sum('amount');
+
+        $balance = $totalIncome - $totalExpense;
+
+        $transactions = $user->transactions()
+            ->with('category')
+            ->latest('date')
+            ->take(10)
+            ->get();
+
+        return view('home', compact(
+            'totalIncome',
+            'totalExpense',
+            'balance',
+            'transactions'));
     }
 }

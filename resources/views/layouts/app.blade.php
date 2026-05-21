@@ -25,10 +25,13 @@
                     <ul class="navbar-nav me-auto">
                         @auth
                         <li class="nav-item">
-                            <a class="nav-link" href="">Biudžėtas</a>
+                            <a class="nav-link" href="{{ route('budgets.index') }}">Biudžėtas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Kategorijos</a>
+                            <a class="nav-link" href="{{ route('transactions.index') }}">Operacijos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('categories.index') }}">Kategorijos</a>
                         </li>
                         @endauth
                     </ul>
@@ -66,4 +69,4 @@
         </main>
     </div>
 </body>
-
+</html>
