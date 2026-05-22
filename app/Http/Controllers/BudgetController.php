@@ -14,14 +14,17 @@ class BudgetController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $month = now()->month;
-        $year = now()->year;
+
+        // Use request data if provided, otherwise default to current month/year
+        $month = $request->query('month', now()->month);
+        $year = $request->query('year', now()->year);
 
         $budgets = $user->budgets()
-            ->where('budget_date', "$year-$month-01") // Budget is monthly, so we don't care about the day.
+            ->where('budget_date', "$year-" . $month . "-01")
+            ->with('category')
             ->get();
 
         $categories = $user->categories()->where('type', 'expense')->get();
@@ -41,7 +44,7 @@ class BudgetController extends Controller
         Auth::user()->budgets()->updateOrCreate(
           [
               'category_id' => $request->category_id,
-              'budget_date' => $request->year . '-' . $request->month . '-01' // Budget is monthly, so we don't care about the day.
+              'budget_date' => $request->year . '-' . $request->month . '-01'
           ],
           [
               'amount_limit' => $request->amount_limit,
@@ -49,5 +52,16 @@ class BudgetController extends Controller
         );
 
         return redirect()->back()->with('success', 'Biudžeto limitas atnaujintas');
+    }
+
+    public function destroy(Budget $budget)
+    {
+        if ($budget->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $budget->delete();
+
+        return redirect()->back()->with('success', 'Biudžeto limitas ištrintas');
     }
 }

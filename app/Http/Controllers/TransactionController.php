@@ -13,12 +13,24 @@ class TransactionController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Auth::user()->transactions()->with('category')->latest()->get();
-        $categories = Auth::user()->categories()->get();
+        $user = Auth::user();
+        
+        // Default to current month/year if not provided
+        $month = $request->query('month', now()->month);
+        $year = $request->query('year', now()->year);
 
-        return view('transactions.index', compact('transactions', 'categories'));
+        $transactions = $user->transactions()
+            ->with('category')
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->latest('date')
+            ->get();
+
+        $categories = $user->categories()->get();
+
+        return view('transactions.index', compact('transactions', 'categories', 'month', 'year'));
     }
 
     public function store(Request $request)
@@ -33,5 +45,16 @@ class TransactionController extends Controller
         Auth::user()->transactions()->create($request->all());
 
         return redirect()->back()->with('success', 'Transakcija išsaugota!');
+    }
+
+    public function destroy(Transaction $transaction)
+    {
+        if ($transaction->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $transaction->delete();
+
+        return redirect()->back()->with('success', 'Operacija ištrinta!');
     }
 }

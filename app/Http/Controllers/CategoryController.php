@@ -38,6 +38,11 @@ class CategoryController extends Controller
             abort(403);
         }
 
+        if (Auth::user()->categories()->count() === 1)
+        {
+            return redirect()->back()->with('error', 'Turi buti bent viena kategorija!');
+        }
+
         $category->delete();
         return redirect()->back()->with('success', 'Kategorija ištrinta!');
     }

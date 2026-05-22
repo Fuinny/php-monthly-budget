@@ -11,38 +11,48 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light shadow-sm bg-white">
+        <nav class="navbar navbar-expand-md navbar-lght shadow-sm bg-white">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/home') }}">{{ config('app.name', 'Laravel') }}</a>
-                <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <a class="navbar-brand" href="{{ url('/home') }}">
+                    {{ __('Monthly personal budget planning system') }}
+                </a>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto">
                         @auth
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('budgets.index') }}">Biudžėtas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('transactions.index') }}">Operacijos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('categories.index') }}">Kategorijos</a>
-                        </li>
+                            <li clas="nav-item">
+                                <a class="nav-link"
+                                   href="{{ route('budgets.index') }}">
+                                    {{ __('Budget') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ route('transactions.index') }}">
+                                    {{ __('Transactions') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ route('categories.index') }}">
+                                    {{ __('Categories') }}
+                                </a>
+                            </li>
                         @endauth
                     </ul>
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('lang.switch', 'en') }}">EN</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('lang.switch', 'lt') }}">LT</a>
+                        </li>
                         @guest
-                            @if (Route::has('login'))
+                            @if(Route::has('login'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-                            @if (Route::has('register'))
+                            @if(Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
@@ -65,7 +75,7 @@
             </div>
         </nav>
         <main class="py-4">
-            @yield('content')
+           @yield('content')
         </main>
     </div>
 </body>
