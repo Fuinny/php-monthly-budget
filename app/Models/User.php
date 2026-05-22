@@ -36,15 +36,16 @@ class User extends Authenticatable
      */
     public function createDefaultCategories() : void
     {
-        $defaults = [
-            ['name' => 'Maistas', 'type' => 'expense'],
-            ['name' => 'Nuoma', 'type' => 'expense'],
-            ['name' => 'Pramogos', 'type' => 'expense'],
-            ['name' => 'Transportas', 'type' => 'expense'],
-            ['name' => 'Atlyginimas', 'type' => 'income']
+         $defaults = [
+             ['name' => __('Food'), 'type' => 'expense'],
+             ['name' => __('Rent'), 'type' => 'expense'],
+             ['name' => __('Entertainment'), 'type' => 'expense'],
+             ['name' => __('Transport'), 'type' => 'expense'],
+             ['name' => __('Salary'), 'type' => 'income']
         ];
 
-        foreach ($defaults as $category) {
+        foreach ($defaults as $category)
+        {
             $this->categories()->create($category);
         }
     }

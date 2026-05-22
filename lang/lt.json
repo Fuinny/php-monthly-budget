@@ -61,5 +61,10 @@
     "October": "Spalis",
     "November": "Lapkritis",
     "December": "Gruodis",
-    "Monthly personal budget planning system": "Mėnesinio asmeninio biudžeto planavimo sistema"
+    "Monthly personal budget planning system": "Mėnesinio asmeninio biudžeto planavimo sistema",
+    "Food": "Maistas",
+    "Rent": "Nuoma",
+    "Entertainment": "Pramogos",
+    "Transport": "Transportas",
+    "Salary": "Atlyginimas"
 }
